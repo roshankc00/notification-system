@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { BullModule } from '@nestjs/bull';
+import { NotificationService } from './notification.service';
 
 @Module({
   imports: [
@@ -21,6 +22,6 @@ import { BullModule } from '@nestjs/bull';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, NotificationService],
 })
 export class AppModule {}
