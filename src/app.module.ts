@@ -5,6 +5,8 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { BullModule } from '@nestjs/bull';
 import { NotificationService } from './notification.service';
 import { APP_GUARD } from '@nestjs/core';
+import { MessageConsumer } from './notification.consumer';
+import { NOTIFICATION_QUEUE } from './constant';
 
 @Module({
   imports: [
@@ -21,6 +23,9 @@ import { APP_GUARD } from '@nestjs/core';
         port: 6379,
       },
     }),
+    BullModule.registerQueue({
+      name: NOTIFICATION_QUEUE,
+    }),
   ],
   controllers: [AppController],
   providers: [
@@ -30,6 +35,7 @@ import { APP_GUARD } from '@nestjs/core';
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
     },
+    MessageConsumer,
   ],
 })
 export class AppModule {}

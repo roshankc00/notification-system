@@ -3,10 +3,16 @@ import { AppService } from './app.service';
 import { NotificationService } from './notification.service';
 import { SkipThrottle, Throttle } from '@nestjs/throttler';
 import axios from 'axios';
+import { NOTIFICATION_QUEUE } from './constant';
+import { Queue } from 'bull';
+import { InjectQueue } from '@nestjs/bull';
 
 @Controller()
 export class AppController {
-  constructor(private readonly notificationService: NotificationService) {}
+  constructor(
+    private readonly notificationService: NotificationService,
+    @InjectQueue(NOTIFICATION_QUEUE) private notificationQueue: Queue,
+  ) {}
 
   // for eg this is the whatsapp notification server and you have this rate limiter
   @Get('send-notification-whatsapp')
@@ -31,9 +37,24 @@ export class AppController {
 
   @Get()
   @SkipThrottle()
-  sendNotification(@Query('q') q: string) {
-    if (q === 'email') {
-    } else {
+  async sendNotification() {
+    try {
+      await this.notificationQueue.add(
+        NOTIFICATION_QUEUE,
+        {},
+        {
+          attempts: 5,
+          backoff: {
+            type: 'exponential',
+            delay: 1000,
+          },
+          removeOnComplete: true,
+          removeOnFail: true,
+        },
+      );
+      return { message: 'Email notification queued successfully' };
+    } catch (error) {
+      console.log(error);
     }
   }
 }

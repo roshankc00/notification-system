@@ -1,1 +1,1 @@
-export const NOTIFICATION_QUEUE = 'verification-email';
+export const NOTIFICATION_QUEUE = 'notification-queue';
