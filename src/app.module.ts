@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { BullModule } from '@nestjs/bull';
 
 @Module({
   imports: [
@@ -12,6 +13,12 @@ import { ThrottlerModule } from '@nestjs/throttler';
         limit: 10000,
       },
     ]),
+    BullModule.forRoot({
+      redis: {
+        host: 'localhost',
+        port: 6379,
+      },
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
