@@ -1,9 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Throttle } from '@nestjs/throttler';
 
 @Injectable()
 export class NotificationService {
-  @Throttle({ short: { ttl: 300000, limit: 2 } })
   async sendEmailNotification(
     to: string,
     subject: string,
@@ -13,7 +11,6 @@ export class NotificationService {
     await this.mockSendOperation('email');
   }
 
-  @Throttle({ short: { ttl: 300000, limit: 2 } })
   async sendWhatsAppNotification(to: string, message: string): Promise<void> {
     console.log(`Sending WhatsApp message to ${to}: ${message}`);
     await this.mockSendOperation('WhatsApp');
