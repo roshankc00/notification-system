@@ -1,0 +1,6 @@
+services:
+  redis:
+    container_name: redis_container
+    image: redis:alpine
+    command: redis-server --loglevel warning
+    restart: always
