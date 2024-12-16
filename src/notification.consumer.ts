@@ -1,7 +1,7 @@
 import { Logger } from '@nestjs/common';
-import { NOTIFICATION_QUEUE } from './constants/constat';
 import { Job } from 'bull';
 import { Process, Processor } from '@nestjs/bull';
+import { NOTIFICATION_QUEUE } from './constant';
 
 @Processor(NOTIFICATION_QUEUE)
 export class MessageConsumer {
